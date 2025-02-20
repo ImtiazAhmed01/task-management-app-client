@@ -1,9 +1,10 @@
 import React from 'react';
+import TasksBoard from './TasksBoard';
 
 const Home = () => {
     return (
         <div>
-            This is home
+            <TasksBoard></TasksBoard>
         </div>
     );
 };
