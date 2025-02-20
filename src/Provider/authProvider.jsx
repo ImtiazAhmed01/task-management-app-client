@@ -17,54 +17,60 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const googleProvider = new GoogleAuthProvider();
 
+    // Function to save user data in the database
+    const saveUserToDatabase = async (user) => {
+        try {
+            const response = await fetch("http://localhost:5000/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    firstName: user.firstName, // add firstName
+                    lastName: user.lastName,   // add lastName
+                }),
+            });
+
+            const data = await response.json();
+            console.log("User saved:", data);
+        } catch (error) {
+            console.error("Error saving user:", error.message);
+        }
+    };
+
+    // Function to create user
     const createUser = async (email, password, userDetails) => {
         try {
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const newUser = userCredential.user;
 
+            const displayName = `${userDetails.firstName} ${userDetails.lastName}`;
+
             await updateProfile(newUser, {
-                displayName: userDetails.displayName,
+                displayName,
                 photoURL: userDetails.photoURL,
             });
 
             const updatedUser = {
                 ...newUser,
-                displayName: userDetails.displayName,
+                displayName,
+                firstName: userDetails.firstName,
+                lastName: userDetails.lastName,
                 photoURL: userDetails.photoURL,
             };
 
             setUser(updatedUser);
             localStorage.setItem("userProfile", JSON.stringify(updatedUser));
+
+            // Save user in database
+            await saveUserToDatabase(updatedUser);
+
             return newUser;
         } catch (error) {
             console.error("Error creating user:", error.message);
-            throw error;
-        }
-    };
-
-    const updateUserProfile = async (updatedUser) => {
-        try {
-            if (auth.currentUser) {
-                await updateProfile(auth.currentUser, {
-                    displayName: updatedUser.displayName,
-                    photoURL: updatedUser.photoURL,
-                });
-
-                const updatedProfile = {
-                    ...auth.currentUser,
-                    displayName: updatedUser.displayName,
-                    photoURL: updatedUser.photoURL,
-                };
-
-                setUser(updatedProfile);
-                localStorage.setItem("userProfile", JSON.stringify(updatedProfile));
-            }
-        } catch (error) {
-            console.error("Error updating profile:", error.message);
             throw error;
         }
     };
@@ -119,7 +125,6 @@ const AuthProvider = ({ children }) => {
                 signInUser,
                 signOutUser,
                 signInWithGoogle,
-                updateUserProfile,
             }}
         >
             {!loading && children}

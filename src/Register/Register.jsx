@@ -5,12 +5,67 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../Provider/authProvider";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 
-
 const Register = () => {
     const { signInWithGoogle } = useContext(AuthContext);
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [passwordError, setPasswordError] = useState("");
+
+    // Save user to database function
+    const saveUserToDatabase = async (user) => {
+        try {
+            const response = await fetch("http://localhost:5000/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                    firstName: user.firstName, // add firstName
+                    lastName: user.lastName,   // add lastName
+                }),
+            });
+
+            const data = await response.json();
+            console.log("User saved:", data);
+        } catch (error) {
+            console.error("Error saving user:", error.message);
+        }
+    };
+
+    // Create user function
+    const createUser = async (email, password, userDetails) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
+            const newUser = userCredential.user;
+
+            const displayName = `${userDetails.firstName} ${userDetails.lastName}`;
+
+            await updateProfile(newUser, {
+                displayName,
+                photoURL: userDetails.photoURL,
+            });
+
+            const updatedUser = {
+                ...newUser,
+                displayName,
+                firstName: userDetails.firstName,
+                lastName: userDetails.lastName,
+                photoURL: userDetails.photoURL,
+            };
+
+            // Save user to localStorage and call saveUserToDatabase
+            localStorage.setItem("userProfile", JSON.stringify(updatedUser));
+            await saveUserToDatabase(updatedUser);
+
+            return newUser;
+        } catch (error) {
+            console.error("Error creating user:", error.message);
+            throw error;
+        }
+    };
 
     const handleGoogleSignIn = async () => {
         try {
@@ -64,25 +119,7 @@ const Register = () => {
         }
 
         try {
-            const auth = getAuth();
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
-            await updateProfile(user, {
-                displayName: `${fname} ${lname}`,
-                photoURL: imageURL,
-            });
-
-            localStorage.setItem(
-                "userProfile",
-                JSON.stringify({
-                    displayName: `${fname} ${lname}`,
-                    photoURL: imageURL,
-                    email: user.email,
-                    fname,
-                    lname,
-                })
-            );
+            await createUser(email, password, { firstName: fname, lastName: lname, photoURL: imageURL });
 
             toast.success("User created successfully!", {
                 position: "top-center",
@@ -93,7 +130,6 @@ const Register = () => {
 
             navigate("/");
         } catch (error) {
-            console.error("Error creating user:", error.message);
             toast.error("Error creating user. Please try again.", {
                 position: "top-center",
                 autoClose: 5000,
