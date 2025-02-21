@@ -13,12 +13,16 @@ import {
 import {
     SortableContext,
     verticalListSortingStrategy,
+    arrayMove,
+    sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { motion } from "framer-motion";
 import TaskForm from "./TaskForm";
 import TaskCard from "./TaskCard";
 import axios from "axios";
 import { io } from "socket.io-client";
+import { KeyboardSensor } from "@dnd-kit/core";
+import EditTask from "../EditTask/EditTask"; // Import EditTask component
 
 const socket = io("http://localhost:5000");
 
@@ -42,10 +46,12 @@ const Column = ({ category, children }) => {
 const TaskBoard = () => {
     const [tasks, setTasks] = useState(initialTasks);
     const [activeTask, setActiveTask] = useState(null);
+    const [editingTask, setEditingTask] = useState(null); // State for editing task
 
     const sensors = useSensors(
         useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-        useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 10 } }) // Adjusted for better touch response
+        useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 10 } }),
+        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
     );
 
     useEffect(() => {
@@ -75,15 +81,39 @@ const TaskBoard = () => {
     const handleDragEnd = async (event) => {
         setActiveTask(null);
         const { active, over } = event;
-        if (!over) return;
+        if (!over || active.id === over.id) return;
 
         const sourceCategory = Object.keys(tasks).find(category =>
             tasks[category].some(task => task._id === active.id)
         );
         const destinationCategory = over.id;
 
-        if (!sourceCategory || !destinationCategory || sourceCategory === destinationCategory) return;
+        if (!sourceCategory || !destinationCategory) return;
 
+        if (sourceCategory === destinationCategory) {
+            const oldIndex = tasks[sourceCategory].findIndex(task => task._id === active.id);
+            const newIndex = tasks[sourceCategory].findIndex(task => task._id === over.id);
+
+            if (oldIndex !== newIndex) {
+                const updatedTasks = { ...tasks };
+                updatedTasks[sourceCategory] = arrayMove(updatedTasks[sourceCategory], oldIndex, newIndex);
+                setTasks(updatedTasks);
+
+                // Optionally, update the order in the backend
+                try {
+                    await axios.put(`http://localhost:5000/tasks/${active.id}`, {
+                        category: sourceCategory, // Keeping category unchanged
+                        newIndex,
+                    });
+                    socket.emit("task-updated", { id: active.id, category: sourceCategory });
+                } catch (error) {
+                    console.error("Error updating task order:", error);
+                }
+            }
+            return;
+        }
+
+        // Moving to a different category (unchanged)
         const newTasks = { ...tasks };
         const movedTask = newTasks[sourceCategory].find(task => task._id === active.id);
 
@@ -130,6 +160,11 @@ const TaskBoard = () => {
             <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">Task Management</h1>
             <TaskForm fetchTasks={fetchTasks} />
 
+            {/* Render EditTask component if editingTask is set */}
+            {editingTask && (
+                <EditTask task={editingTask} setTasks={setTasks} setEditingTask={setEditingTask} />
+            )}
+
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
@@ -141,7 +176,12 @@ const TaskBoard = () => {
                         <Column key={category} category={category}>
                             <SortableContext items={tasks[category].map(task => task._id)} strategy={verticalListSortingStrategy}>
                                 {tasks[category].map((task) => (
-                                    <TaskCard key={task._id} task={task} fetchTasks={fetchTasks} />
+                                    <TaskCard
+                                        key={task._id}
+                                        task={task}
+                                        fetchTasks={fetchTasks}
+                                        setEditingTask={setEditingTask} // Add this to pass down editingTask function
+                                    />
                                 ))}
                             </SortableContext>
                         </Column>

@@ -32,12 +32,12 @@ const Navbar = () => {
     return (
         <div className="sticky top-0 z-50 shadow-md bg-[#BC6C25]/40">
             <nav className="navbar px-4 py-3 flex justify-between items-center">
-                {/* Left Section: Logo & Menu Button (Mobile) */}
+
                 <div className="flex items-center gap-4">
                     <NavLink to="/" className="text-2xl font-bold text-[#3F0113]">
                         TaskForce
                     </NavLink>
-                    {/* Mobile Menu Button */}
+
                     <button
                         onClick={() => setIsOpen(!isOpen)}
                         className="text-[#3F0113] text-2xl sm:hidden"

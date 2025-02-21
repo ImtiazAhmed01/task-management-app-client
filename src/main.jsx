@@ -9,6 +9,7 @@ import Login from './Login/Login.jsx'
 import Root from './Root.jsx'
 import Register from './Register/Register.jsx'
 import Addtask from './AddTask/Addtask.jsx'
+import EditTask from './EditTask/EditTask.jsx'
 
 
 const router = createBrowserRouter([
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: '/addtask',
         element: <Addtask></Addtask>
+      },
+      {
+        path: '/edittask',
+        element: <EditTask></EditTask>
       }
     ]
 
