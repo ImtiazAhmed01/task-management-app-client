@@ -34,7 +34,7 @@ const Navbar = () => {
             <nav className="navbar px-4 py-3 flex justify-between items-center">
 
                 <div className="flex items-center gap-4">
-                    <NavLink to="/" className="text-2xl font-bold text-[#3F0113]">
+                    <NavLink to="/home" className="text-2xl font-bold text-[#3F0113]">
                         TaskForce
                     </NavLink>
 
@@ -56,6 +56,15 @@ const Navbar = () => {
                             <NavLink to="/edittask" className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white">
                                 Edit Task
                             </NavLink>
+                            <NavLink to="/" className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white">Welcome Message</NavLink>
+
+                            {/* Manage Your Tasks Button */}
+                            <button
+                                onClick={() => navigate(user ? "/home" : "/register")}
+                                className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white"
+                            >
+                                Manage Your Tasks
+                            </button>
                         </>
                     )}
                 </div>

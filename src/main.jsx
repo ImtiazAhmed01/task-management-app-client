@@ -10,44 +10,51 @@ import Root from './Root.jsx'
 import Register from './Register/Register.jsx'
 import Addtask from './AddTask/Addtask.jsx'
 import EditTask from './EditTask/EditTask.jsx'
-
+import WelcomeMsg from './WelcomeMsg/WelcomeMsg.jsx'
+import PrivateRoute from './PrivateRoute.jsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root></Root>,
+    element: <Root />,
     children: [
       {
-        path: '/',
-        element: <Home></Home>
-      },
-
-      {
-        path: '/login',
-        element: <Login></Login>
+        path: "/",
+        element: <WelcomeMsg />
       },
       {
-        path: '/register',
-        element: <Register></Register>
+        path: "/register",
+        element: <Register />
       },
       {
-        path: '/addtask',
-        element: <Addtask></Addtask>
+        path: "/login",
+        element: <Login />
       },
       {
-        path: '/edittask',
-        element: <EditTask></EditTask>
+        element: <PrivateRoute />, // Protect routes inside this block
+        children: [
+          {
+            path: "/home",
+            element: <Home />
+          },
+          {
+            path: "/addtask",
+            element: <Addtask />
+          },
+          {
+            path: "/edittask",
+            element: <EditTask />
+          }
+        ]
       }
     ]
-
   }
 ])
-
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={router} />
     </AuthProvider>
-  </StrictMode>,
-)
+  </StrictMode>
+);

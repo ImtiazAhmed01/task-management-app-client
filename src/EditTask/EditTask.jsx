@@ -1,66 +1,21 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from 'react';
 
-const EditTask = ({ task, setTasks, setEditingTask }) => {
-    // Ensure task is not undefined before accessing properties
-    const [title, setTitle] = useState(task?.title || "");
-    const [description, setDescription] = useState(task?.description || "");
-
-    // Update state when `task` changes
-    useEffect(() => {
-        if (task) {
-            setTitle(task.title);
-            setDescription(task.description);
-        }
-    }, [task]);
-
-    const handleUpdate = async () => {
-        if (!task) {
-            console.error("Error: No task selected for editing.");
-            return;
-        }
-
+const EditTask = () => {
+    const fetchTasks = async () => {
         try {
-            const response = await axios.put(`http://localhost:5000/tasks/${task._id}`, {
-                title,
-                description,
-            });
-
-            setTasks(prevTasks => prevTasks.map(t => (t._id === task._id ? response.data : t)));
-            setEditingTask(null);
-        } catch (err) {
-            console.error("Error updating task:", err);
+            const { data } = await axios.get("http://localhost:5000/tasks");
+            const organizedTasks = { "To-Do": [], "In Progress": [], Done: [] };
+            data.forEach((task) => organizedTasks[task.category].push(task));
+            setTasks(organizedTasks);
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
         }
     };
-
-    if (!task) {
-        return null; // Don't render if task is not set
-    }
-
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <h2>Edit Task</h2>
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Enter task title"
-                />
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Enter task description"
-                />
-                <div className="modal-buttons">
-                    <button className="btn btn-primary" onClick={handleUpdate}>
-                        Save
-                    </button>
-                    <button className="btn btn-secondary" onClick={() => setEditingTask(null)}>
-                        Cancel
-                    </button>
-                </div>
-            </div>
+        <div>
+            <h3 className="text-lg font-semibold text-gray-800">{task.title}</h3>
+            <p className="text-gray-600">{task.description}</p>
+
         </div>
     );
 };
