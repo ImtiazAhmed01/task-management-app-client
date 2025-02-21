@@ -1,5 +1,5 @@
 import React from 'react';
-import TasksBoard from './TasksBoard';
+import TasksBoard from './TaskBoard';
 
 const Home = () => {
     return (

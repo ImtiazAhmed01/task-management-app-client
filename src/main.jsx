@@ -8,6 +8,7 @@ import Home from './Home/Home.jsx'
 import Login from './Login/Login.jsx'
 import Root from './Root.jsx'
 import Register from './Register/Register.jsx'
+import Addtask from './AddTask/Addtask.jsx'
 
 
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register></Register>
+      },
+      {
+        path: '/addtask',
+        element: <Addtask></Addtask>
       }
     ]
 
