@@ -7,7 +7,7 @@ const Addtask = ({ setTasks }) => {
 
     const addTask = () => {
         if (!newTaskTitle) return;  // Validation to ensure title is entered
-        axios.post('http://localhost:5000/tasks', {
+        axios.post('https://taskforce-management.vercel.app/tasks', {
             title: newTaskTitle,
             description: newTaskDescription,
             category: 'To-Do',  // Default to 'To-Do'

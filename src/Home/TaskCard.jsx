@@ -16,7 +16,7 @@ const TaskCard = ({ task, fetchTasks }) => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:5000/tasks/${task._id}`);
+            await axios.delete(`https://taskforce-management.vercel.app/tasks/${task._id}`);
             fetchTasks(); // Refresh the tasks after deletion
         } catch (error) {
             console.error("Error deleting task:", error);
@@ -25,7 +25,7 @@ const TaskCard = ({ task, fetchTasks }) => {
 
     const handleEdit = async () => {
         try {
-            await axios.put(`http://localhost:5000/tasks/${task._id}`, editedTask);
+            await axios.put(`https://taskforce-management.vercel.app/tasks/${task._id}`, editedTask);
             fetchTasks(); // Refresh the tasks after editing
             setIsEditing(false);
         } catch (error) {
@@ -48,6 +48,8 @@ const TaskCard = ({ task, fetchTasks }) => {
                 <div>
                     <h3 className="text-lg font-semibold text-gray-800">{task.title}</h3>
                     <p className="text-gray-600">{task.description}</p>
+                    <p className="text-gray-600">{task.dueDate?.split("T")[0] || "No due date"}</p>
+
                 </div>
                 <div className="flex gap-2">
                     <button onClick={() => setIsEditing(true)} className="text-blue-500 text-xl"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48">

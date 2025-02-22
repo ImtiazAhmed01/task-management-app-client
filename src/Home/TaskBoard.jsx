@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
     DndContext,
     closestCenter,
@@ -23,6 +23,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { KeyboardSensor } from "@dnd-kit/core";
 import EditTask from "../EditTask/EditTask"; // Import EditTask component
+import { AuthContext } from "../Provider/authProvider";
 
 const socket = io("http://localhost:5000");
 
@@ -47,6 +48,7 @@ const TaskBoard = () => {
     const [tasks, setTasks] = useState(initialTasks);
     const [activeTask, setActiveTask] = useState(null);
     const [editingTask, setEditingTask] = useState(null); // State for editing task
+    const { user } = useContext(AuthContext);
 
     const sensors = useSensors(
         useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -60,9 +62,14 @@ const TaskBoard = () => {
 
     const fetchTasks = async () => {
         try {
-            const { data } = await axios.get("http://localhost:5000/tasks");
+            // Get logged-in user from context
+
+
+            const { data } = await axios.get(`https://taskforce-management.vercel.app/tasks?userId=${user.uid}`);
+
             const organizedTasks = { "To-Do": [], "In Progress": [], Done: [] };
             data.forEach((task) => organizedTasks[task.category].push(task));
+
             setTasks(organizedTasks);
         } catch (error) {
             console.error("Error fetching tasks:", error);
@@ -101,7 +108,7 @@ const TaskBoard = () => {
 
                 // Optionally, update the order in the backend
                 try {
-                    await axios.put(`http://localhost:5000/tasks/${active.id}`, {
+                    await axios.put(`https://taskforce-management.vercel.app/tasks/${active.id}`, {
                         category: sourceCategory, // Keeping category unchanged
                         newIndex,
                     });
@@ -124,7 +131,7 @@ const TaskBoard = () => {
         setTasks(newTasks);
 
         try {
-            await axios.put(`http://localhost:5000/tasks/${movedTask._id}`, {
+            await axios.put(`https://taskforce-management.vercel.app/tasks/${movedTask._id}`, {
                 category: destinationCategory,
             });
 
@@ -157,7 +164,7 @@ const TaskBoard = () => {
 
     return (
         <motion.div className="max-w-5xl mx-auto p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-            <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">Task Management</h1>
+            <h1 className="text-3xl font-bold text-center  mb-4">Task Management</h1>
             <TaskForm fetchTasks={fetchTasks} />
 
 

@@ -3,7 +3,7 @@ import React from 'react';
 const EditTask = () => {
     const fetchTasks = async () => {
         try {
-            const { data } = await axios.get("http://localhost:5000/tasks");
+            const { data } = await axios.get("https://taskforce-management.vercel.app/tasks");
             const organizedTasks = { "To-Do": [], "In Progress": [], Done: [] };
             data.forEach((task) => organizedTasks[task.category].push(task));
             setTasks(organizedTasks);

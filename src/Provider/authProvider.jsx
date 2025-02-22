@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
     // Function to save user data in the database
     const saveUserToDatabase = async (user) => {
         try {
-            const response = await fetch("http://localhost:5000/users", {
+            const response = await fetch("https://taskforce-management.vercel.app/users", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
