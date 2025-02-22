@@ -7,25 +7,6 @@ TaskForce simple and efficient task management system with drag-and-drop functio
 
 To experience the website [Click here](https://task-management-applicat-abc53.web.app/)
 
-## 🛠️ Technologies Used
-
-### **Frontend:**
-- ⚛️ **React.js** - Component-based UI development  
-- 🎨 **Tailwind CSS** - Utility-first styling framework  
-- 🖱️ **DnD Kit** - Drag-and-drop functionality  
-- 💬 **React Toastify** - Notifications for user feedback  
-- 🔥 **Firebase Authentication** - User authentication  
-
-### **Backend:**
-- 🟢 **Node.js** - JavaScript runtime for server-side logic  
-- 🚀 **Express.js** - Lightweight web framework  
-- 🗄️ **MongoDB** - NoSQL database for storing tasks  
-- 🌐 **Socket.io** - Real-time task updates  
-
-### **Deployment & Hosting:**
-- ▲ **Vercel** - Frontend deployment  
-- 🌍 **Render / Heroku** - Backend hosting  
-- 🔑 **Firebase** - Authentication & user management  
 
 
 ## 📦 Dependencies
@@ -64,4 +45,66 @@ To experience the website [Click here](https://task-management-applicat-abc53.we
   - globals: ^15.12.0,  
   - postcss: ^8.4.49,  
   - tailwindcss: ^3.4.16,  
-  - vite: ^6.0.1 
+  - vite: ^6.0.1
+
+## 🛠 Installation step and & run locally
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/multi-visa-navigator.git
+   cd multi-visa-navigator
+   ```
+
+2. Install dependencies:
+     ```sh
+   npm i react-router-dom
+   ```
+   ```sh
+   npm i react-toastify
+   ```
+
+   ```sh
+   npm install
+   ```
+
+3. Create a `.env` file and add your Firebase credentials:
+   ```env
+   VITE_apiKey=YOUR_API_KEY
+   VITE_authDomain=YOUR_AUTH_DOMAIN
+   VITE_projectId=YOUR_PROJECT_ID
+   VITE_storageBucket=YOUR_STORAGE_BUCKET
+   VITE_messagingSenderId=YOUR_MESSAGING_SENDER_ID
+   VITE_appId=YOUR_APP_ID
+   ```
+
+4. Running Locally
+```sh
+npm run dev
+```
+
+5. Building for Production
+```sh
+npm run build
+```
+## 🛠️ Technologies Used
+
+### **Frontend:**
+- ⚛️ **React.js** - Component-based UI development  
+- 🎨 **Tailwind CSS** - Utility-first styling framework  
+- 🖱️ **DnD Kit** - Drag-and-drop functionality  
+- 💬 **React Toastify** - Notifications for user feedback  
+- 🔥 **Firebase Authentication** - User authentication  
+
+### **Backend:**
+- 🟢 **Node.js** - JavaScript runtime for server-side logic  
+- 🚀 **Express.js** - Lightweight web framework  
+- 🗄️ **MongoDB** - NoSQL database for storing tasks  
+- 🌐 **Socket.io** - Real-time task updates  
+
+### **Deployment & Hosting:**
+- ▲ **Vercel** - Frontend deployment  
+- 🌍 **Render / Heroku** - Backend hosting  
+- 🔑 **Firebase** - Authentication & user management  
+
+
+🚀 **Live Site:** [Multi Visa Navigator](https://task-management-applicat-abc53.web.app/)
