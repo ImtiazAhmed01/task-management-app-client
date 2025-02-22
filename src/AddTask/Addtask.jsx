@@ -35,7 +35,7 @@ const Addtask = ({ setTasks }) => {
                 maxLength="200"
                 onChange={(e) => setNewTaskDescription(e.target.value)}
             />
-            <button className='btn btn-primary' onClick={addTask}>Add Task</button>
+            <button className='btn bg-[#BC6C25]/90' onClick={addTask}>Add Task</button>
         </div>
     );
 };

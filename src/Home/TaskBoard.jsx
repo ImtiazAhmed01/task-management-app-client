@@ -160,10 +160,6 @@ const TaskBoard = () => {
             <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">Task Management</h1>
             <TaskForm fetchTasks={fetchTasks} />
 
-            {/* Render EditTask component if editingTask is set */}
-            {editingTask && (
-                <EditTask task={editingTask} setTasks={setTasks} setEditingTask={setEditingTask} />
-            )}
 
             <DndContext
                 sensors={sensors}

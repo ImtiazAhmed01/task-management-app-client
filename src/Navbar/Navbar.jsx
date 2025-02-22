@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Provider/authProvider";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FiMenu, FiX } from "react-icons/fi"; // Import icons for mobile menu toggle
+import { FiMenu, FiX } from "react-icons/fi";
+import logo1 from '../assets/task2.png'
 
 const Navbar = () => {
     const { user, signOutUser } = useContext(AuthContext);
@@ -30,17 +31,17 @@ const Navbar = () => {
     };
 
     return (
-        <div className="sticky top-0 z-50 shadow-md bg-[#BC6C25]/40">
+        <div className="sticky top-0 z-50 shadow-md bg-[#BC6C25]/90">
             <nav className="navbar px-4 py-3 flex justify-between items-center">
 
                 <div className="flex items-center gap-4">
-                    <NavLink to="/home" className="text-2xl font-bold text-[#3F0113]">
-                        TaskForce
+                    <NavLink to="/home" className="text-2xl font-bold text-[#FFFF00] flex gap-2">
+                        <img src={logo1} alt="" />TaskForce
                     </NavLink>
 
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="text-[#3F0113] text-2xl sm:hidden"
+                        className="text-[#FFFF00] text-2xl sm:hidden"
                     >
                         {isOpen ? <FiX /> : <FiMenu />}
                     </button>
@@ -48,25 +49,15 @@ const Navbar = () => {
 
                 {/* Middle Section: Navigation Links (Hidden on Mobile) */}
                 <div className="hidden sm:flex items-center gap-4">
-                    {user && (
-                        <>
-                            <NavLink to="/addtask" className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white">
-                                Add Task
-                            </NavLink>
-                            <NavLink to="/edittask" className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white">
-                                Edit Task
-                            </NavLink>
-                            <NavLink to="/" className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white">Welcome Message</NavLink>
 
-                            {/* Manage Your Tasks Button */}
-                            <button
-                                onClick={() => navigate(user ? "/home" : "/register")}
-                                className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white"
-                            >
-                                Manage Your Tasks
-                            </button>
-                        </>
-                    )}
+                    <NavLink to="/" className="btn btn-outline border-[#FFFF00] text-[#FFFF00] hover:bg-[#FFFF00] hover:text-black">Welcome Message</NavLink>
+
+                    <button
+                        onClick={() => navigate(user ? "/home" : "/register")}
+                        className="btn btn-outline border-[#FFFF00] text-[#FFFF00] hover:bg-[#FFFF00] hover:text-black"
+                    >
+                        Manage Your Tasks
+                    </button>
                 </div>
 
                 {/* Right Section: User Actions */}
@@ -77,11 +68,11 @@ const Navbar = () => {
 
                     {user ? (
                         <>
-                            <span className="text-lg font-semibold text-[#3F0113]">
+                            <span className="text-lg font-semibold text-[#FFFF00]">
                                 {user.displayName}
                             </span>
                             <button
-                                className="btn bg-[#DDA15E] text-[#3F0113] border-none hover:bg-[#BC6C25]"
+                                className="btn bg-[#DDA15E] text-[#FFFF00] border-none hover:bg-[#FFFF00] hover:text-black"
                                 onClick={handleLogout}
                             >
                                 Log Out
@@ -89,10 +80,10 @@ const Navbar = () => {
                         </>
                     ) : (
                         <>
-                            <NavLink to="/register" className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white">
+                            <NavLink to="/register" className="btn btn-outline border-[#FFFF00] hover:bg-[#FFFF00] ">
                                 Sign Up
                             </NavLink>
-                            <NavLink to="/login" className="btn btn-outline border-[#BC6C25] text-[#BC6C25] hover:bg-[#BC6C25] hover:text-white">
+                            <NavLink to="/login" className="btn btn-outline border-[#FFFF00]  hover:bg-[#FFFF00] ">
                                 Log In
                             </NavLink>
                         </>
@@ -102,15 +93,17 @@ const Navbar = () => {
 
             {/* Mobile Menu (Dropdown) */}
             {isOpen && (
-                <div className="sm:hidden bg-white shadow-md p-4">
+                <div className="sm:hidden bg-[#BC6C25]/90 shadow-md p-4">
                     {user && (
                         <>
-                            <NavLink to="/addtask" className="block text-[#BC6C25] py-2">
-                                Add Task
-                            </NavLink>
-                            <NavLink to="/edittask" className="block text-[#BC6C25] py-2">
-                                Edit Task
-                            </NavLink>
+                            <NavLink to="/" className="btn btn-outline border-[#FFFF00] text-[#FFFF00] hover:bg-[#FFFF00] hover:text-black">Welcome Message</NavLink>
+
+                            <button
+                                onClick={() => navigate(user ? "/home" : "/register")}
+                                className="btn btn-outline border-[#FFFF00] text-[#FFFF00] hover:bg-[#FFFF00] hover:text-black"
+                            >
+                                Manage Your Tasks
+                            </button>
                         </>
                     )}
 
@@ -120,11 +113,11 @@ const Navbar = () => {
 
                     {user ? (
                         <>
-                            <span className="block text-center font-semibold text-[#3F0113] py-2">
+                            <span className="block text-center font-semibold text-[#FFFF00] py-2">
                                 {user.displayName}
                             </span>
                             <button
-                                className="w-full bg-[#DDA15E] text-[#3F0113] py-2 rounded-md hover:bg-[#BC6C25]"
+                                className="w-full bg-[#DDA15E] text-[#FFFF00] py-2 rounded-md hover:bg-[#FFFF00]"
                                 onClick={handleLogout}
                             >
                                 Log Out
@@ -132,10 +125,10 @@ const Navbar = () => {
                         </>
                     ) : (
                         <>
-                            <NavLink to="/register" className="block text-[#BC6C25] py-2">
+                            <NavLink to="/register" className="block text-[#FFFF00] py-2">
                                 Sign Up
                             </NavLink>
-                            <NavLink to="/login" className="block text-[#BC6C25] py-2">
+                            <NavLink to="/login" className="block text-[#FFFF00] py-2">
                                 Log In
                             </NavLink>
                         </>

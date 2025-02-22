@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { AuthContext } from "../Provider/authProvider";
 
 const Welcome = () => {
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
+
 
     // Animation Variants
     const fadeIn = {
@@ -22,19 +25,19 @@ const Welcome = () => {
 
     return (
         <motion.div
-            className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-center p-6"
+            className="flex flex-col items-center justify-center min-h-screen  text-center p-6"
             initial="hidden"
             animate="visible"
         >
             <motion.h1
-                className="text-4xl font-bold text-gray-800 mb-4"
+                className="text-4xl font-bold  mb-4"
                 variants={fadeIn}
             >
-                Welcome to <span className="text-blue-500">TaskForce</span>
+                Welcome to <span className="text-[#BC6C25]/90">TaskForce</span>
             </motion.h1>
 
             <motion.p
-                className="text-lg text-gray-600 max-w-2xl"
+                className="text-lg max-w-2xl"
                 variants={fadeIn}
             >
                 TaskForce is your **ultimate task management solution**, designed to boost productivity,
@@ -44,18 +47,18 @@ const Welcome = () => {
 
             {/* Benefits Section */}
             <motion.div
-                className="bg-white p-6 rounded-lg shadow-lg mt-6 max-w-lg"
+                className="bg-[#BC6C25]/90 p-6 rounded-lg shadow-lg mt-6 max-w-lg"
                 variants={fadeIn}
             >
                 <motion.h2
-                    className="text-2xl font-semibold text-gray-800 mb-3"
+                    className="text-2xl font-semibold  mb-3"
                     variants={fadeIn}
                 >
                     Why Use a Task Management App?
                 </motion.h2>
 
                 <motion.ul
-                    className="text-gray-600 text-left list-disc list-inside space-y-2"
+                    className=" text-left list-disc list-inside space-y-2"
                     initial="hidden"
                     animate="visible"
                 >
@@ -82,23 +85,26 @@ const Welcome = () => {
                 className="mt-6 flex gap-4"
                 variants={fadeIn}
             >
-                <motion.button
-                    onClick={() => navigate("/register")}
-                    className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 transition"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    Register
-                </motion.button>
+                {!user && (
+                    <>
+                        <motion.button
+                            onClick={() => navigate("/register")}
+                            className="btn btn-outline border-[#FFFF00]  hover:bg-[#FFFF00] hover:text-black"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            Register
+                        </motion.button>
 
-                <motion.button
-                    onClick={() => navigate("/login")}
-                    className="px-6 py-3 bg-gray-700 text-white font-semibold rounded-lg shadow hover:bg-gray-800 transition"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    Log In
-                </motion.button>
+                        <motion.button
+                            onClick={() => navigate("/login")}
+                            className="btn btn-outline border-[#FFFF00]  hover:bg-[#FFFF00] hover:text-black" whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            Log In
+                        </motion.button>
+                    </>
+                )}
             </motion.div>
         </motion.div>
     );

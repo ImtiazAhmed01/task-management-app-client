@@ -34,7 +34,7 @@ const TaskForm = ({ fetchTasks }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
             />
-            <button className="bg-blue-500 text-white px-4 py-2 rounded">Add Task</button>
+            <button className="bg-[#BC6C25]/90 text-white px-4 py-2 rounded">Add Task</button>
         </form>
     );
 };
